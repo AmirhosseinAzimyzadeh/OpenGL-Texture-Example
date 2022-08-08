@@ -1,3 +1,4 @@
 /.vscode
 /external_libs
+/build
 output.exe
