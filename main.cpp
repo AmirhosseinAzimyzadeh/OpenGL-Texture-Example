@@ -1,9 +1,7 @@
 #include <iostream>
-#include "external_libs/glew.h"
-#include "external_libs/glfw.h"
+using namespace std;
 
 int main() {
-  std::cout << "Hello world c++ from vscode" << std::endl;
-  std::cout << "Adding GLEW and GLFW" << std::endl;
+  cout << "Hello world" << endl;
   return 0;
 }
