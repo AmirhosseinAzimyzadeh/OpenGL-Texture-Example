@@ -59,6 +59,7 @@ int main() {
     // clear window
     glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    // swap buffers (what user sees with what we draw)
     glfwSwapBuffers(mainWindow);
   }
   
