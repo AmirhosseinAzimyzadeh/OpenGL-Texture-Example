@@ -30,6 +30,37 @@ int main() {
     return 1;
   }
 
-  cout << "GLFW initialized" << endl;
+  // buffer size information
+  int bufferWidth;
+  int bufferHeight;
+  glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
+
+  // setting context for the GLEW
+  glfwMakeContextCurrent(mainWindow);
+
+  // Allow modern extension features
+  glewExperimental = GL_TRUE;
+
+  if (glewInit() != GLEW_OK) {
+    cout << "Failed to initialize GLEW" << endl;
+    glfwDestroyWindow(mainWindow);
+    glfwTerminate();
+    return 1;
+  }
+
+  // set up viewport
+  glViewport(0, 0, bufferWidth, bufferHeight);
+
+  
+  while (!glfwWindowShouldClose(mainWindow)) {
+    // handle inputs
+    glfwPollEvents();
+
+    // clear window
+    glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glfwSwapBuffers(mainWindow);
+  }
+  
   return 0;
 }
