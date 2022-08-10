@@ -65,6 +65,67 @@ void createTriangle() {
   glBindVertexArray(0);
 }
 
+void addShader(GLuint program, const char* shaderCode, GLenum shaderType) {
+  GLuint shader = glCreateShader(shaderType);
+
+  const GLchar* code[1];
+  code[0] = shaderCode;
+
+  GLint codeLength[1];
+  codeLength[0] = strlen(shaderCode);
+
+  glShaderSource(shader, 1, code, codeLength);
+  glCompileShader(shader);
+
+  GLint result = 0;
+  GLchar errorLog[1024] = { 0 };
+
+  // check link status
+  glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
+  if (!result) {
+    glGetShaderInfoLog(shader, sizeof(errorLog), NULL, errorLog);
+    cout << "Error compiling shader program: " << errorLog << endl;
+    return;
+  }
+
+  glAttachShader(program, shader);
+}
+
+
+void compileShaders() {
+  shader = glCreateProgram();
+
+  if (!shader) {
+    cout << "Error creating shader program" << endl;
+    return;
+  }
+  addShader(shader, vShader, GL_VERTEX_SHADER);
+  addShader(shader, fShader, GL_FRAGMENT_SHADER);
+
+  GLint result = 0;
+  GLchar errorLog[1024] = { 0 };
+
+  glLinkProgram(shader);
+
+  // check link status
+  glGetProgramiv(shader, GL_LINK_STATUS, &result);
+  if (!result) {
+    glGetProgramInfoLog(shader, sizeof(errorLog), NULL, errorLog);
+    cout << "Error linking shader program: " << errorLog << endl;
+    return;
+  }
+
+  // validate program
+  glValidateProgram(shader);
+  glGetProgramiv(shader, GL_VALIDATE_STATUS, &result);
+  if (!result) {
+    glGetProgramInfoLog(shader, sizeof(errorLog), NULL, errorLog);
+    cout << "Error validating the program: " << errorLog << endl;
+    return;
+  }
+
+}
+
 
 int main() {
   if (!glfwInit()) {
@@ -110,6 +171,8 @@ int main() {
   // set up viewport
   glViewport(0, 0, bufferWidth, bufferHeight);
 
+  createTriangle();
+  compileShaders();
   
   while (!glfwWindowShouldClose(mainWindow)) {
     // handle inputs
@@ -118,6 +181,17 @@ int main() {
     // clear window
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glUseProgram(shader);
+
+    glBindVertexArray(VAO);
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    glBindVertexArray(0);
+
+    glUseProgram(0);
+
     // swap buffers (what user sees with what we draw)
     glfwSwapBuffers(mainWindow);
   }
