@@ -4,6 +4,7 @@
 
 #include "gl/glew.h"
 #include "glfw/glfw3.h"
+#include "glm/common.hpp"
 
 using namespace std;
 
