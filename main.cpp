@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string.h>
+#include <cmath>
 
 #include "gl/glew.h"
 #include "glfw/glfw3.h"
@@ -13,26 +14,33 @@ const GLint HEIGHT = 600;
 GLuint VAO;
 GLuint VBO;
 GLuint shader;
+GLuint uniformXMove;
+
+bool direction = true;
+float triangleOffset = 0.0f;
+float triangleMaxOffset = 0.7f;
+float triangleOffsetIncrement = 0.00005f;
 
 // create vertex shader
 static const char* vShader = "\n\
-#version 330 core\n\
+#version 330\n\
 \n\
 layout (location = 0) in vec3 position;\n\
+uniform float xMove; \n\
 \n\
 void main()\n\
 {\n\
-    gl_Position = vec4(0.5 * position.x, 0.5 * position.y, position.z, 1.0);\n\
+  gl_Position = vec4(0.4f * position.x + xMove, 0.4f * position.y, position.z, 1.0);\n\
 }";
 
 static const char* fShader = "\n\
-#version 330 core\n\
+#version 330\n\
 \n\
 out vec4 color;\n\
 \n\
 void main()\n\
 {\n\
-    color = vec4(0.1, 0.0, 1.0, 1.0);\n\
+    color = vec4(1.0, 0.0, 1.0, 1.0);\n\
 }";
 
 void createTriangle() {
@@ -124,6 +132,7 @@ void compileShaders() {
     return;
   }
 
+  uniformXMove = glGetUniformLocation(shader, "xMove");
 }
 
 
@@ -178,11 +187,24 @@ int main() {
     // handle inputs
     glfwPollEvents();
 
+    // check direction
+    if (direction) {
+      triangleOffset += triangleOffsetIncrement;
+    } else {
+      triangleOffset -= triangleOffsetIncrement;
+    }
+
+    if (abs(triangleOffset) > triangleMaxOffset) {
+      direction = !direction;
+    }
+
     // clear window
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(shader);
+
+    glUniform1f(uniformXMove, triangleOffset);
 
     glBindVertexArray(VAO);
 
