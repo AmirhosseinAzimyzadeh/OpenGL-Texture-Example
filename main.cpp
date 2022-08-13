@@ -37,7 +37,7 @@ uniform mat4 model; \n\
 \n\
 void main()\n\
 {\n\
-  gl_Position = model * vec4(0.4f * position.x, 0.4f * position.y, position.z, 1.0);\n\
+  gl_Position = model * vec4(position, 1.0);\n\
 }";
 
 static const char* fShader = "\n\
