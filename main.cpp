@@ -4,7 +4,9 @@
 
 #include "gl/glew.h"
 #include "glfw/glfw3.h"
-#include "glm/common.hpp"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 using namespace std;
 
@@ -15,7 +17,7 @@ const GLint HEIGHT = 600;
 GLuint VAO;
 GLuint VBO;
 GLuint shader;
-GLuint uniformXMove;
+GLuint uniformModel;
 
 bool direction = true;
 float triangleOffset = 0.0f;
@@ -27,11 +29,11 @@ static const char* vShader = "\n\
 #version 330\n\
 \n\
 layout (location = 0) in vec3 position;\n\
-uniform float xMove; \n\
+uniform mat4 model; \n\
 \n\
 void main()\n\
 {\n\
-  gl_Position = vec4(0.4f * position.x + xMove, 0.4f * position.y, position.z, 1.0);\n\
+  gl_Position = model * vec4(0.4f * position.x, 0.4f * position.y, position.z, 1.0);\n\
 }";
 
 static const char* fShader = "\n\
@@ -133,7 +135,7 @@ void compileShaders() {
     return;
   }
 
-  uniformXMove = glGetUniformLocation(shader, "xMove");
+  uniformModel = glGetUniformLocation(shader, "model");
 }
 
 
@@ -205,7 +207,11 @@ int main() {
 
     glUseProgram(shader);
 
-    glUniform1f(uniformXMove, triangleOffset);
+    // creating transform matrix
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(triangleOffset, triangleOffset, 0.0f));
+
+    glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
     glBindVertexArray(VAO);
 
