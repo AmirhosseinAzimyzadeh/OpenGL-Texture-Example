@@ -33,21 +33,24 @@ static const char* vShader = "\n\
 #version 330\n\
 \n\
 layout (location = 0) in vec3 position;\n\
-uniform mat4 model; \n\
+out vec4 vertexColor;\n\
+uniform mat4 model;\n\
 \n\
 void main()\n\
 {\n\
   gl_Position = model * vec4(position, 1.0);\n\
+  vertexColor = vec4(clamp(position, 0.0f, 1.0f), 1.0f);\n\
 }";
 
 static const char* fShader = "\n\
 #version 330\n\
 \n\
+in vec4 vertexColor;\n\
 out vec4 color;\n\
 \n\
 void main()\n\
 {\n\
-    color = vec4(1.0, 0.0, 1.0, 1.0);\n\
+    color = vertexColor;\n\
 }";
 
 void createTriangle() {
@@ -213,9 +216,9 @@ int main() {
 
     // creating transform matrix
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(triangleOffset, triangleOffset, 0.0f));
-    model = glm::rotate(model, toRadian(triangleOffset * 100), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, glm::vec3(0.1f, 0.5f, 1.0f));
+    // model = glm::translate(model, glm::vec3(triangleOffset, triangleOffset, 0.0f));
+    // model = glm::rotate(model, toRadian(triangleOffset * 100), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
