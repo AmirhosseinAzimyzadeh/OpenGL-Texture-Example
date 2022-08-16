@@ -211,7 +211,7 @@ int main() {
   createTriangle();
   compileShaders();
   
-  glm::mat4 projection = glm::perspective(toRadian(45.0f), (GLfloat)bufferWidth / (GLfloat)bufferHeight, 0.1f, 100.0f);
+  glm::mat4 projection = glm::perspective(45.0f, (GLfloat)bufferWidth / (GLfloat)bufferHeight, 0.1f, 100.0f);
 
   while (!glfwWindowShouldClose(mainWindow)) {
     // handle inputs
@@ -220,12 +220,10 @@ int main() {
     // check direction
     if (direction) {
       triangleOffset += triangleOffsetIncrement;
-    } else {
-      triangleOffset -= triangleOffsetIncrement;
     }
 
     if (abs(triangleOffset) > triangleMaxOffset) {
-      direction = !direction;
+      triangleOffset = 0;
     }
 
     // clear window
