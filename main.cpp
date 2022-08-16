@@ -16,6 +16,7 @@ const GLint HEIGHT = 600;
 // VAOs and VBOs ids
 GLuint VAO;
 GLuint VBO;
+GLuint IBO;
 GLuint shader;
 GLuint uniformModel;
 
@@ -54,14 +55,27 @@ void main()\n\
 }";
 
 void createTriangle() {
+
+  unsigned int indices[] = {
+    0, 3, 1,
+    1, 3, 2,
+    2, 3, 0,
+    0, 1, 2
+  };
+
   GLfloat vertices[] = {
     -1.0f, -1.0f, 0.0f,
+    -1.0f, -1.0f, 1.0f,
     1.0f, -1.0f, 0.0f,
     0.0f, 1.0f, 0.0f
   };
 
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
+
+  glGenBuffers(1, &IBO);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
   glGenBuffers(1, &VBO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -78,8 +92,7 @@ void createTriangle() {
   glEnableVertexAttribArray(0);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-  // unbind VAO
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }
 
@@ -217,16 +230,18 @@ int main() {
     // creating transform matrix
     glm::mat4 model = glm::mat4(1.0f);
     // model = glm::translate(model, glm::vec3(triangleOffset, triangleOffset, 0.0f));
-    // model = glm::rotate(model, toRadian(triangleOffset * 100), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::rotate(model, toRadian(triangleOffset * 100), glm::vec3(1.0f, 1.0f, 1.0f));
     model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
     glBindVertexArray(VAO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
     glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     glUseProgram(0);
 
