@@ -10,8 +10,8 @@
 
 using namespace std;
 
-const GLint WIDTH = 800;
-const GLint HEIGHT = 600;
+const GLint WIDTH = 900;
+const GLint HEIGHT = 800;
 
 // VAOs and VBOs ids
 GLuint VAO;
@@ -22,8 +22,8 @@ GLuint uniformModel;
 
 bool direction = true;
 float triangleOffset = 0.0f;
-float triangleMaxOffset = 0.7f;
-float triangleOffsetIncrement = 0.00005f;
+float triangleMaxOffset = 360.0f;
+float triangleOffsetIncrement = 0.005f;
 
 float toRadian(float degree) {
   return degree * M_PI / 180.0f;
@@ -230,7 +230,7 @@ int main() {
     // creating transform matrix
     glm::mat4 model = glm::mat4(1.0f);
     // model = glm::translate(model, glm::vec3(triangleOffset, triangleOffset, 0.0f));
-    model = glm::rotate(model, toRadian(triangleOffset * 100), glm::vec3(1.0f, 1.0f, 1.0f));
+    model = glm::rotate(model, toRadian(triangleOffset), glm::vec3(1.0f, 1.0f, 0.0f));
     model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
