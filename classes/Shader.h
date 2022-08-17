@@ -11,6 +11,15 @@ class Shader {
 
   void createFromString();
 
+  GLuint getProjectionLocation();
+  GLuint getModelLocation();
+
+  void useShader();
+  void clearShader();
+
   private:
     GLuint shaderID, uniformProjection, uniformModel;
+
+    void compileShader();
+    void addShader();
 }
