@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <cmath>
+#include <vector>
 
 #include "gl/glew.h"
 #include "glfw/glfw3.h"
@@ -8,15 +9,13 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+#include "classes/Mesh.cpp"
+
 using namespace std;
 
 const GLint WIDTH = 900;
 const GLint HEIGHT = 800;
 
-// VAOs and VBOs ids
-GLuint VAO;
-GLuint VBO;
-GLuint IBO;
 GLuint shader;
 GLuint uniformModel;
 GLuint uniformProjection;
@@ -25,6 +24,8 @@ bool direction = true;
 float triangleOffset = 0.0f;
 float triangleMaxOffset = 360.0f;
 float triangleOffsetIncrement = 0.005f;
+
+std::vector<Mesh*> meshes;
 
 float toRadian(float degree) {
   return degree * M_PI / 180.0f;
@@ -72,30 +73,13 @@ void createTriangle() {
     0.0f, 1.0f, 0.0f
   };
 
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
+  Mesh *obj1 = new Mesh();
+  obj1->createMesh(vertices, indices, 12, 12);
+  meshes.push_back(obj1);
 
-  glGenBuffers(1, &IBO);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-  glGenBuffers(1, &VBO);
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER,  sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-  glVertexAttribPointer(
-    0,
-    3,
-    GL_FLOAT,
-    GL_FALSE, // is dynamic?
-    0, // skip
-    0 // offset
-  );
-  glEnableVertexAttribArray(0);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  Mesh *obj2 = new Mesh();
+  obj2->createMesh(vertices, indices, 12, 12);
+  meshes.push_back(obj2);
 }
 
 void addShader(GLuint program, const char* shaderCode, GLenum shaderType) {
@@ -237,17 +221,18 @@ int main() {
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, -3.0f));
     model = glm::rotate(model, toRadian(triangleOffset), glm::vec3(1.0f, 1.0f, 0.0f));
     model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
-
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+    meshes[0]->renderMesh();
 
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
-    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, -3.0f));
+    model = glm::rotate(model, toRadian((-1 * triangleOffset) + 30), glm::vec3(1.0f, 1.0f, 0.0f));
+    model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
+    glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+    meshes[1]->renderMesh();
 
-    glBindVertexArray(0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     glUseProgram(0);
 
