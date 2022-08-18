@@ -10,15 +10,12 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include "classes/Mesh.cpp"
+#include "classes/Shader.cpp"
 
 using namespace std;
 
 const GLint WIDTH = 900;
 const GLint HEIGHT = 800;
-
-GLuint shader;
-GLuint uniformModel;
-GLuint uniformProjection;
 
 bool direction = true;
 float triangleOffset = 0.0f;
@@ -26,6 +23,7 @@ float triangleMaxOffset = 360.0f;
 float triangleOffsetIncrement = 0.005f;
 
 std::vector<Mesh*> meshes;
+std::vector<Shader*> shaders;
 
 float toRadian(float degree) {
   return degree * M_PI / 180.0f;
@@ -82,67 +80,10 @@ void createTriangle() {
   meshes.push_back(obj2);
 }
 
-void addShader(GLuint program, const char* shaderCode, GLenum shaderType) {
-  GLuint shader = glCreateShader(shaderType);
-
-  const GLchar* code[1];
-  code[0] = shaderCode;
-
-  GLint codeLength[1];
-  codeLength[0] = strlen(shaderCode);
-
-  glShaderSource(shader, 1, code, codeLength);
-  glCompileShader(shader);
-
-  GLint result = 0;
-  GLchar errorLog[1024] = { 0 };
-
-  // check link status
-  glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
-  if (!result) {
-    glGetShaderInfoLog(shader, sizeof(errorLog), NULL, errorLog);
-    cout << "Error compiling shader program: " << errorLog << endl;
-    return;
-  }
-
-  glAttachShader(program, shader);
-}
-
-
-void compileShaders() {
-  shader = glCreateProgram();
-
-  if (!shader) {
-    cout << "Error creating shader program" << endl;
-    return;
-  }
-  addShader(shader, vShader, GL_VERTEX_SHADER);
-  addShader(shader, fShader, GL_FRAGMENT_SHADER);
-
-  GLint result = 0;
-  GLchar errorLog[1024] = { 0 };
-
-  glLinkProgram(shader);
-
-  // check link status
-  glGetProgramiv(shader, GL_LINK_STATUS, &result);
-  if (!result) {
-    glGetProgramInfoLog(shader, sizeof(errorLog), NULL, errorLog);
-    cout << "Error linking shader program: " << errorLog << endl;
-    return;
-  }
-
-  // validate program
-  glValidateProgram(shader);
-  glGetProgramiv(shader, GL_VALIDATE_STATUS, &result);
-  if (!result) {
-    glGetProgramInfoLog(shader, sizeof(errorLog), NULL, errorLog);
-    cout << "Error validating the program: " << errorLog << endl;
-    return;
-  }
-
-  uniformModel = glGetUniformLocation(shader, "model");
-  uniformProjection = glGetUniformLocation(shader, "projection");
+void createShaders() {
+  Shader *shader1 = new Shader();
+  shader1->createFromString(vShader, fShader);
+  shaders.push_back(shader1);
 }
 
 
@@ -193,8 +134,11 @@ int main() {
   glViewport(0, 0, bufferWidth, bufferHeight);
 
   createTriangle();
-  compileShaders();
+  createShaders();
   
+  GLuint uniformModel = shaders[0]->getModelLocation();
+  GLuint uniformProjection = shaders[0]->getProjectionLocation();
+
   glm::mat4 projection = glm::perspective(45.0f, (GLfloat)bufferWidth / (GLfloat)bufferHeight, 0.1f, 100.0f);
 
   while (!glfwWindowShouldClose(mainWindow)) {
@@ -214,7 +158,7 @@ int main() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glUseProgram(shader);
+    shaders[0]->useShader();
 
     // creating transform matrix
     glm::mat4 model = glm::mat4(1.0f);
