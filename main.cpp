@@ -25,35 +25,12 @@ float triangleOffsetIncrement = 0.005f;
 std::vector<Mesh*> meshes;
 std::vector<Shader*> shaders;
 
+const char* vertexShaderSource = "../../shaders/shader.vert";
+const char* fragmentShaderSource = "../../shaders/shader.frag";
+
 float toRadian(float degree) {
   return degree * M_PI / 180.0f;
 }
-
-// create vertex shader
-static const char* vShader = "\n\
-#version 330\n\
-\n\
-layout (location = 0) in vec3 position;\n\
-out vec4 vertexColor;\n\
-uniform mat4 model;\n\
-uniform mat4 projection;\n\
-\n\
-void main()\n\
-{\n\
-  gl_Position = projection * model * vec4(position, 1.0);\n\
-  vertexColor = vec4(clamp(position, 0.0f, 1.0f), 1.0f);\n\
-}";
-
-static const char* fShader = "\n\
-#version 330\n\
-\n\
-in vec4 vertexColor;\n\
-out vec4 color;\n\
-\n\
-void main()\n\
-{\n\
-    color = vertexColor;\n\
-}";
 
 void createTriangle() {
 
@@ -82,7 +59,7 @@ void createTriangle() {
 
 void createShaders() {
   Shader *shader1 = new Shader();
-  shader1->createFromString(vShader, fShader);
+  shader1->createFromSources(vertexShaderSource, fragmentShaderSource);
   shaders.push_back(shader1);
 }
 
