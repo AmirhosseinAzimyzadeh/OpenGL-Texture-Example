@@ -28,10 +28,6 @@ std::vector<Shader*> shaders;
 const char* vertexShaderSource = "../../shaders/shader.vert";
 const char* fragmentShaderSource = "../../shaders/shader.frag";
 
-float toRadian(float degree) {
-  return degree * M_PI / 180.0f;
-}
-
 void createTriangle() {
 
   unsigned int indices[] = {
@@ -140,7 +136,7 @@ int main() {
     // creating transform matrix
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, -3.0f));
-    model = glm::rotate(model, toRadian(triangleOffset), glm::vec3(1.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, utils::toRadian(triangleOffset), glm::vec3(1.0f, 1.0f, 0.0f));
     model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
@@ -149,7 +145,7 @@ int main() {
 
     model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, -3.0f));
-    model = glm::rotate(model, toRadian((-1 * triangleOffset) + 30), glm::vec3(1.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, utils::toRadian((-1 * triangleOffset) + 30), glm::vec3(1.0f, 1.0f, 0.0f));
     model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     meshes[1]->renderMesh();
