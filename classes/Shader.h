@@ -9,6 +9,7 @@ class Shader {
   public: Shader();
 
   void createFromString(const char* vertexCode, const char* fragmentCode);
+  void createFromSources(const char* vertexSource, const char* fragmentSource);
 
   GLuint getProjectionLocation();
   GLuint getModelLocation();
