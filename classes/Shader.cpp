@@ -1,5 +1,6 @@
 #include "Shader.h"
 #include <iostream>
+#include "utils.cpp"
 
 using namespace std;
 
@@ -11,6 +12,15 @@ Shader::Shader() {
 
 void Shader::createFromString(const char* vertexCode, const char* fragmentCode) {
   compileShader(vertexCode, fragmentCode);
+}
+
+void Shader::createFromSources(const char* vertexSource, const char* fragmentSource) {
+  string vCode = utils::readFile(vertexSource);
+  string fCode = utils::readFile(fragmentSource);
+  compileShader(
+    vCode.c_str(),
+    fCode.c_str()
+  );
 }
 
 void Shader::compileShader(
