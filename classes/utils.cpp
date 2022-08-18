@@ -25,5 +25,9 @@ namespace utils {
     std::cout << "FILE: --" << content << "\n";
     return content;
   }
+
+  float toRadian(float degree) {
+    return degree * M_PI / 180.0f;
+  }
 }
 
