@@ -7,9 +7,8 @@
 
 class Shader {
   public: Shader();
-  ~Shader();
 
-  void createFromString();
+  void createFromString(const char* vertexCode, const char* fragmentCode);
 
   GLuint getProjectionLocation();
   GLuint getModelLocation();
@@ -17,9 +16,11 @@ class Shader {
   void useShader();
   void clearShader();
 
+  ~Shader();
+
   private:
     GLuint shaderID, uniformProjection, uniformModel;
 
-    void compileShader();
-    void addShader();
-}
+    void compileShader(const char* vertexCode, const char* fragmentCode);
+    void addShader(GLuint program, const char* shaderCode, GLenum shaderType);
+};
