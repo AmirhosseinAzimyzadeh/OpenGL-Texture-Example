@@ -57,9 +57,7 @@ void createShaders() {
   shaders.push_back(shader1);
 }
 
-
 int main() {
-  // mainWindow = new Window(WIDTH, HEIGHT);
   mainWindow.initialize();
 
   createTriangle();
