@@ -20,11 +20,6 @@ const GLint HEIGHT = 800;
 
 WindowHandler mainWindow = WindowHandler(WIDTH, HEIGHT);
 
-bool direction = true;
-float triangleOffset = 0.0f;
-float triangleMaxOffset = 360.0f;
-float triangleOffsetIncrement = 0.005f;
-
 std::vector<Mesh*> meshes;
 std::vector<Shader*> shaders;
 
@@ -84,15 +79,6 @@ int main() {
     // handle inputs
     glfwPollEvents();
 
-    // check direction
-    if (direction) {
-      triangleOffset += triangleOffsetIncrement;
-    }
-
-    if (abs(triangleOffset) > triangleMaxOffset) {
-      triangleOffset = 0;
-    }
-
     // clear window
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -102,7 +88,6 @@ int main() {
     // creating transform matrix
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, -3.0f));
-    model = glm::rotate(model, utils::toRadian(triangleOffset), glm::vec3(1.0f, 1.0f, 0.0f));
     model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
@@ -111,7 +96,6 @@ int main() {
 
     model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, -3.0f));
-    model = glm::rotate(model, utils::toRadian((-1 * triangleOffset) + 30), glm::vec3(1.0f, 1.0f, 0.0f));
     model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     meshes[1]->renderMesh();
