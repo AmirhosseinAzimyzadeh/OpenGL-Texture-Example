@@ -109,11 +109,6 @@ void WindowHandler::handleMouseMove(GLFWwindow *window, double x, double y) {
   theWindow->yChange = theWindow->lastY - y;
   theWindow->lastX = x;
   theWindow->lastY = y;
-
-  cout << "xChange: " << theWindow->xChange << endl;
-  cout << "yChange: " << theWindow->yChange << endl;
-  cout << "x" << x << endl;
-  cout << "y" << y << endl;
 }
 
 WindowHandler::~WindowHandler() {
