@@ -22,4 +22,10 @@ class WindowHandler {
 
     GLint width, height;
     GLint bufferWidth, bufferHeight;
+
+    bool keys[1024];
+
+    void initKeyArray();
+
+    static void handleKey(GLFWwindow *window, int key, int scancode, int action, int mode);
 };
