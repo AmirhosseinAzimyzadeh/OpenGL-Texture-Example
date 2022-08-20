@@ -6,15 +6,22 @@ using namespace std;
 WindowHandler::WindowHandler() {
   width = 800;
   height = 600;
-  initKeyArray();
-  isFirstMove = true;
+  initializePrivateProperties();
 }
 
 WindowHandler::WindowHandler(GLint windowWidth, GLint windowHeight) {
   width = windowWidth;
   height = windowHeight;
-  initKeyArray();
+  initializePrivateProperties();
+}
+
+void WindowHandler::initializePrivateProperties() {
+  lastX = 0;
+  lastY = 0;
+  xChange = 0;
+  yChange = 0;
   isFirstMove = true;
+  initKeyArray();
 }
 
 GLfloat WindowHandler::getBufferWidth() { return bufferWidth; }

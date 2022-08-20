@@ -39,6 +39,8 @@ class WindowHandler {
 
     void initKeyArray();
 
+    void initializePrivateProperties();
+
     static void handleKey(GLFWwindow *window, int key, int scancode, int action, int mode);
     static void handleMouseMove(GLFWwindow *window, double xpos, double ypos);
 };
