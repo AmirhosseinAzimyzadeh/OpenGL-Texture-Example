@@ -70,6 +70,7 @@ int WindowHandler::initialize() {
   glfwSetWindowUserPointer(mainWindow, this);
 
   glfwSetKeyCallback(mainWindow, handleKey);
+  glfwSetCursorPosCallback(mainWindow, handleMouseMove);
   return 0;
 }
 
@@ -102,6 +103,18 @@ void WindowHandler::handleKey(
   }
 }
 
+void WindowHandler::handleMouseMove(GLFWwindow *window, double x, double y) {
+  WindowHandler* theWindow = static_cast<WindowHandler*>(glfwGetWindowUserPointer(window));
+  theWindow->xChange = x - theWindow->lastX;
+  theWindow->yChange = theWindow->lastY - y;
+  theWindow->lastX = x;
+  theWindow->lastY = y;
+
+  cout << "xChange: " << theWindow->xChange << endl;
+  cout << "yChange: " << theWindow->yChange << endl;
+  cout << "x" << x << endl;
+  cout << "y" << y << endl;
+}
 
 WindowHandler::~WindowHandler() {
   if (mainWindow) {
