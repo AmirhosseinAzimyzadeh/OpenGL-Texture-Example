@@ -73,6 +73,9 @@ int WindowHandler::initialize() {
 
   glfwSetKeyCallback(mainWindow, handleKey);
   glfwSetCursorPosCallback(mainWindow, handleMouseMove);
+
+  // glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
   return 0;
 }
 
