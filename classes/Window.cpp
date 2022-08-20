@@ -7,12 +7,14 @@ WindowHandler::WindowHandler() {
   width = 800;
   height = 600;
   initKeyArray();
+  isFirstMove = true;
 }
 
 WindowHandler::WindowHandler(GLint windowWidth, GLint windowHeight) {
   width = windowWidth;
   height = windowHeight;
   initKeyArray();
+  isFirstMove = true;
 }
 
 GLfloat WindowHandler::getBufferWidth() { return bufferWidth; }
@@ -105,6 +107,13 @@ void WindowHandler::handleKey(
 
 void WindowHandler::handleMouseMove(GLFWwindow *window, double x, double y) {
   WindowHandler* theWindow = static_cast<WindowHandler*>(glfwGetWindowUserPointer(window));
+  
+  if (theWindow->isFirstMove) {
+    theWindow->lastX = x;
+    theWindow->lastY = y;
+    theWindow->isFirstMove = false;
+  }
+
   theWindow->xChange = x - theWindow->lastX;
   theWindow->yChange = theWindow->lastY - y;
   theWindow->lastX = x;

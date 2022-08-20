@@ -30,6 +30,7 @@ class WindowHandler {
     GLfloat lastY;
     GLfloat xChange;
     GLfloat yChange;
+    bool isFirstMove;
 
     void initKeyArray();
 
