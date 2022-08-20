@@ -13,6 +13,11 @@ class WindowHandler {
 
   bool getShouldClose();
 
+  bool* getPressedKeys();
+
+  GLfloat getXChange();
+  GLfloat getYChange();
+
   void swapBuffers();
 
   ~WindowHandler();

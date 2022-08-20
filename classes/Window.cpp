@@ -85,6 +85,22 @@ void WindowHandler::initKeyArray() {
   }
 }
 
+bool* WindowHandler::getPressedKeys() {
+  return keys;
+}
+
+GLfloat WindowHandler::getXChange() {
+  GLfloat temp = xChange;
+  xChange = 0;
+  return temp;
+}
+
+GLfloat WindowHandler::getYChange() {
+  GLfloat temp = yChange;
+  yChange = 0;
+  return temp;
+}
+
 void WindowHandler::handleKey(
   GLFWwindow *window,
   int key,
