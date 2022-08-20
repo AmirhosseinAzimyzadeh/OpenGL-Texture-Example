@@ -10,8 +10,6 @@ namespace utils {
     std::string content;
     std::string line;
 
-    std::cout << "READING FILE:" << filePath << '\n';
-
     std::ifstream targetFile (filePath);
     if (targetFile.is_open()) {
       char c;
@@ -22,7 +20,6 @@ namespace utils {
       std::cout << "Unable to open file";
     }
 
-    std::cout << "FILE: --" << content << "\n";
     return content;
   }
 
