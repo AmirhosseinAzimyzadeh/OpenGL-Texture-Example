@@ -4,7 +4,12 @@
 
 class Camera {
   public:
-    Camera();
+    Camera(
+      glm::vec3,
+      glm::vec3,
+      GLfloat yaw,
+      GLfloat pitch
+    );
     ~Camera();
   
   private:
