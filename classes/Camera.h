@@ -5,10 +5,10 @@
 class Camera {
   public:
     Camera(
-      glm::vec3,
-      glm::vec3,
-      GLfloat yaw,
-      GLfloat pitch
+      glm::vec3 startPosition,
+      glm::vec3 startUp,
+      GLfloat startYaw,
+      GLfloat startPitch
     );
     ~Camera();
   
@@ -21,4 +21,6 @@ class Camera {
 
     GLfloat yaw;
     GLfloat pitch;
+
+    void update();
 };
