@@ -8,7 +8,9 @@ class Camera {
       glm::vec3 startPosition,
       glm::vec3 startUp,
       GLfloat startYaw,
-      GLfloat startPitch
+      GLfloat startPitch,
+      GLfloat startMoveSpeed,
+      GLfloat startTurnSpeed
     );
     ~Camera();
   
