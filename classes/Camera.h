@@ -1,9 +1,11 @@
 #include <gl/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "glfw/glfw3.h"
 
 class Camera {
   public:
+    Camera();
     Camera(
       glm::vec3 startPosition,
       glm::vec3 startUp,
@@ -12,6 +14,11 @@ class Camera {
       GLfloat startMoveSpeed,
       GLfloat startTurnSpeed
     );
+
+    void keyHandler(bool* keys);
+
+    glm::mat4 getViewMatrix();
+
     ~Camera();
   
   private:
@@ -23,6 +30,9 @@ class Camera {
 
     GLfloat yaw;
     GLfloat pitch;
+
+    GLfloat moveSpeed;
+    GLfloat turnSpeed;
 
     void update();
 };
