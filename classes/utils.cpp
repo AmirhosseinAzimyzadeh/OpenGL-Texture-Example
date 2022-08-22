@@ -3,6 +3,7 @@
 #include <fstream>
 #include <filesystem>
 #include <unistd.h>
+#include "glfw/glfw3.h"
 
 namespace utils {
   // reading a file
@@ -25,6 +26,14 @@ namespace utils {
 
   float toRadian(float degree) {
     return degree * M_PI / 180.0f;
+  }
+
+  GLfloat lastTime = 0.0f;
+  GLfloat getDeltaTime() {
+    GLfloat currentTime = glfwGetTime();
+    GLfloat deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
+    return deltaTime;
   }
 }
 
