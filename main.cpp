@@ -27,7 +27,7 @@ Camera camera = Camera(
   -90.0f,
   0.0f,
   5.0f,
-  5.0f
+  0.3f
 );
 
 std::vector<Mesh*> meshes;
@@ -98,6 +98,7 @@ int main() {
     shaders[0]->useShader();
 
     camera.keyHandler(mainWindow.getPressedKeys(), deltaTime);
+    camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
     // creating transform matrix
     glm::mat4 model = glm::mat4(1.0f);
