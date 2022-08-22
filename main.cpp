@@ -22,7 +22,7 @@ const GLint HEIGHT = 800;
 WindowHandler mainWindow = WindowHandler(WIDTH, HEIGHT);
 
 Camera camera = Camera(
-  glm::vec3(0.0f, 0.0f, -30.0f),
+  glm::vec3(0.0f, 0.0f, -5.0f),
   glm::vec3(0.0f, 1.0f, 0.0f),
   90.0f,
   0.0f,
