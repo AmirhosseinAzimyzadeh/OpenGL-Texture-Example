@@ -12,6 +12,7 @@
 #include "classes/Mesh.cpp"
 #include "classes/Shader.cpp"
 #include "classes/Window.cpp"
+#include "classes/Camera.cpp"
 
 using namespace std;
 
@@ -19,6 +20,15 @@ const GLint WIDTH = 900;
 const GLint HEIGHT = 800;
 
 WindowHandler mainWindow = WindowHandler(WIDTH, HEIGHT);
+
+Camera camera = Camera(
+  glm::vec3(0.0f, 0.0f, -30.0f),
+  glm::vec3(0.0f, 1.0f, 0.0f),
+  90.0f,
+  0.0f,
+  0.0005f,
+  0.0005f
+);
 
 std::vector<Mesh*> meshes;
 std::vector<Shader*> shaders;
@@ -65,6 +75,7 @@ int main() {
   
   GLuint uniformModel = shaders[0]->getModelLocation();
   GLuint uniformProjection = shaders[0]->getProjectionLocation();
+  GLuint uniformView = shaders[0]->getViewLocation();
 
   glm::mat4 projection = glm::perspective(
     45.0f,
@@ -83,12 +94,17 @@ int main() {
 
     shaders[0]->useShader();
 
+    camera.keyHandler(mainWindow.getPressedKeys());
+
     // creating transform matrix
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, -0.5f, -3.0f));
     model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
+
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.getViewMatrix()));
+
     meshes[0]->renderMesh();
 
 
