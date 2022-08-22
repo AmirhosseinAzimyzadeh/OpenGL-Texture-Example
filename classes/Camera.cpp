@@ -54,6 +54,12 @@ void Camera::keyHandler(bool* keys, GLfloat deltaTime) {
   update();
 }
 
+void Camera::mouseControl(GLfloat xChange, GLfloat yChange) {
+  yaw = fmod(yaw + (xChange * turnSpeed), 360.0f);
+  pitch = fmod(pitch + (yChange * turnSpeed), 360.0f);
+  update();
+}
+
 
 glm::mat4 Camera::getViewMatrix() {
   return glm::lookAt(position, position + front, up);
