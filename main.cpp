@@ -22,12 +22,12 @@ const GLint HEIGHT = 800;
 WindowHandler mainWindow = WindowHandler(WIDTH, HEIGHT);
 
 Camera camera = Camera(
-  glm::vec3(0.0f, 0.0f, -5.0f),
+  glm::vec3(0.0f, 0.0f, 5.0f),
   glm::vec3(0.0f, 1.0f, 0.0f),
-  90.0f,
+  -90.0f,
   0.0f,
-  0.0005f,
-  0.0005f
+  5.0f,
+  5.0f
 );
 
 std::vector<Mesh*> meshes;
@@ -88,13 +88,16 @@ int main() {
     // handle inputs
     glfwPollEvents();
 
+    // delta time
+    GLfloat deltaTime = utils::getDeltaTime();
+
     // clear window
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     shaders[0]->useShader();
 
-    camera.keyHandler(mainWindow.getPressedKeys());
+    camera.keyHandler(mainWindow.getPressedKeys(), deltaTime);
 
     // creating transform matrix
     glm::mat4 model = glm::mat4(1.0f);
