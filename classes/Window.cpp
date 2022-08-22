@@ -82,6 +82,7 @@ int WindowHandler::initialize() {
   glfwSetCursorPosCallback(mainWindow, handleMouseMove);
 
   // glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  isMouseDown = false;
 
   return 0;
 }
@@ -133,7 +134,13 @@ void WindowHandler::handleKey(
 
 void WindowHandler::handleMouseMove(GLFWwindow *window, double x, double y) {
   WindowHandler* theWindow = static_cast<WindowHandler*>(glfwGetWindowUserPointer(window));
+  int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
   
+  if (state != GLFW_PRESS) {
+    theWindow->isFirstMove = true;
+    return;
+  }
+
   if (theWindow->isFirstMove) {
     theWindow->lastX = x;
     theWindow->lastY = y;

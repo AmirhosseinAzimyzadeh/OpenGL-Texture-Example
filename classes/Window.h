@@ -36,6 +36,7 @@ class WindowHandler {
     GLfloat xChange;
     GLfloat yChange;
     bool isFirstMove;
+    bool isMouseDown;
 
     void initKeyArray();
 
