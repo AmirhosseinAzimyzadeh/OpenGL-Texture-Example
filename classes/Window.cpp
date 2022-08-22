@@ -18,8 +18,8 @@ WindowHandler::WindowHandler(GLint windowWidth, GLint windowHeight) {
 void WindowHandler::initializePrivateProperties() {
   lastX = 0;
   lastY = 0;
-  xChange = 0;
-  yChange = 0;
+  xChange = 0.0f;
+  yChange = 0.0f;
   isFirstMove = true;
   initKeyArray();
 }
