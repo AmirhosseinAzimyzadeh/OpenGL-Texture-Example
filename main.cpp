@@ -1,3 +1,5 @@
+#define STB_IMAGE_IMPLEMENTATION
+
 #include <iostream>
 #include <string.h>
 #include <cmath>
@@ -13,11 +15,16 @@
 #include "classes/Shader.cpp"
 #include "classes/Window.cpp"
 #include "classes/Camera.cpp"
+#include "classes/Texture.cpp"
 
 using namespace std;
 
 const GLint WIDTH = 900;
 const GLint HEIGHT = 800;
+
+const char* vertexShaderSource = "../../shaders/shader.vert";
+const char* fragmentShaderSource = "../../shaders/shader.frag";
+const char* textureFile = "../../textures/rock_tex_01.png";
 
 WindowHandler mainWindow = WindowHandler(WIDTH, HEIGHT);
 
@@ -30,11 +37,10 @@ Camera camera = Camera(
   0.3f
 );
 
+Texture rockTexture = Texture(strdup(textureFile));
+
 std::vector<Mesh*> meshes;
 std::vector<Shader*> shaders;
-
-const char* vertexShaderSource = "../../shaders/shader.vert";
-const char* fragmentShaderSource = "../../shaders/shader.frag";
 
 void createTriangle() {
 
@@ -46,18 +52,19 @@ void createTriangle() {
   };
 
   GLfloat vertices[] = {
-    -1.0f, -1.0f, 0.0f,
-    -1.0f, -1.0f, 1.0f,
-    1.0f, -1.0f, 0.0f,
-    0.0f, 1.0f, 0.0f
+    // x,y,z - u, v
+    -1.0f, -1.0f, 0.0f,   0.0f, 0.0f,
+    -1.0f, -1.0f, 1.0f,   1.0f, 0.0f,
+    1.0f, -1.0f, 0.0f,    2.0f, 0.0f,
+    0.0f, 1.0f, 0.0f,     1.0f, 2.0f
   };
 
   Mesh *obj1 = new Mesh();
-  obj1->createMesh(vertices, indices, 12, 12);
+  obj1->createMesh(vertices, indices, 20, 12);
   meshes.push_back(obj1);
 
   Mesh *obj2 = new Mesh();
-  obj2->createMesh(vertices, indices, 12, 12);
+  obj2->createMesh(vertices, indices, 20, 12);
   meshes.push_back(obj2);
 }
 
@@ -72,6 +79,9 @@ int main() {
 
   createTriangle();
   createShaders();
+
+  // load texture
+  rockTexture.loadTexture();
   
   GLuint uniformModel = shaders[0]->getModelLocation();
   GLuint uniformProjection = shaders[0]->getProjectionLocation();
@@ -108,7 +118,7 @@ int main() {
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
     glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.getViewMatrix()));
-
+    rockTexture.useTexture();
     meshes[0]->renderMesh();
 
 
