@@ -4,12 +4,12 @@ Texture::Texture() {
   resetProperties();
 }
 
-Texture::resetProperties() {
+void Texture::resetProperties() {
   textureId = 0;
   width = 0;
   height = 0;
   bitDepth = 0;
-  fileLocation = "";
+  fileLocation = NULL;
 }
 
 Texture::Texture(char* filePath) {
@@ -47,11 +47,11 @@ void Texture::loadTexture() {
   glGenerateMipmap(GL_TEXTURE_2D);
 
   glBindTexture(GL_TEXTURE_2D, 0);
-  stb_image_free(data);
+  stbi_image_free(data);
 }
 
 void Texture::useTexture() {
-  glActiveTexture(GL_TEXTURE0);
+  glActiveTexture(GL_TEXTURE0); // texture unit
   glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
