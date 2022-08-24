@@ -1,4 +1,6 @@
 #include "Light.h"
+#include <iostream>
+using namespace std;
 
 Light::Light() {
   color = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -10,8 +12,8 @@ Light::Light(GLfloat red, GLfloat green, GLfloat blue, GLfloat intensity) {
   ambientIntensity = intensity;
 }
 
-void Light::useLight(GLfloat ambientIntensityLocation, GLfloat ambientColourLocation) {
-  glUniform3f(ambientColourLocation, color.x, color.y, color.z);
+void Light::useLight(GLfloat ambientIntensityLocation, GLfloat ambientColorLocation) {
+  glUniform3f(ambientColorLocation, color.x, color.y, color.z);
   glUniform1f(ambientIntensityLocation, ambientIntensity);
 }
 
