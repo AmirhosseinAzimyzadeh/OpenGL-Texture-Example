@@ -16,6 +16,8 @@
 #include "classes/Window.cpp"
 #include "classes/Camera.cpp"
 #include "classes/Texture.cpp"
+#include "classes/Light.cpp"
+
 
 using namespace std;
 
@@ -35,6 +37,13 @@ Camera camera = Camera(
   0.0f,
   5.0f,
   0.3f
+);
+
+Light mainLight = Light(
+  1.0f,
+  1.0f,
+  1.0f,
+  1.0f
 );
 
 Texture rockTexture = Texture(strdup(textureFile));
@@ -86,6 +95,8 @@ int main() {
   GLuint uniformModel = shaders[0]->getModelLocation();
   GLuint uniformProjection = shaders[0]->getProjectionLocation();
   GLuint uniformView = shaders[0]->getViewLocation();
+  GLuint uniformAmbientColor = shaders[0]->getAmbientColorLocation();
+  GLuint uniformAmbientIntensity = shaders[0]->getAmbientIntensityLocation();
 
   glm::mat4 projection = glm::perspective(
     45.0f,
@@ -106,6 +117,7 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     shaders[0]->useShader();
+    mainLight.useLight(uniformAmbientIntensity, uniformAmbientColor);
 
     camera.keyHandler(mainWindow.getPressedKeys(), deltaTime);
     camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
