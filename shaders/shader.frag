@@ -3,10 +3,18 @@
 in vec4 vertexColor;
 in vec2 vertexTexture;
 
+struct DirectionalLight {
+    vec3 color;
+    Glfloat ambientIntensity;
+};
+
 out vec4 color;
 
 uniform sampler2D textureSampler;
+uniform DirectionalLight directionalLight;
 
 void main() {
-    color = texture(textureSampler, vertexTexture) * vertexColor;
+    vec4 ambientColor = vec4(directionalLight.color, 1.0f)
+        * directionalLight.ambientIntensity;
+    color = texture(textureSampler, vertexTexture) * ambientColor;
 }
