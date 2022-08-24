@@ -7,7 +7,7 @@ class Light {
     Light(GLfloat red, GLfloat green, GLfloat blue, GLfloat intensity);
     ~Light();
 
-    useLight(GLfloat ambientIntensityLocation, GLfloat ambientColourLocation);
+    void useLight(GLfloat ambientIntensityLocation, GLfloat ambientColorLocation);
 
   private:
     glm::vec3 color;
