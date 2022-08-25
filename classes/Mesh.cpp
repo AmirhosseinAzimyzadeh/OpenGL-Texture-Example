@@ -28,24 +28,34 @@ void Mesh::createMesh(
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * numberOfVertices, vertices, GL_STATIC_DRAW);
 
   glVertexAttribPointer(
-    0, // position
+    0, // position (layout 0)
     3,
     GL_FLOAT,
     GL_FALSE, // is dynamic?
-    (sizeof(vertices[0]) * 5), // skip
+    (sizeof(vertices[0]) * 8), // skip
     0 // offset
   );
   glEnableVertexAttribArray(0);
 
   glVertexAttribPointer(
-    1, // texture coordinate
+    1, // texture coordinate (layout 1)
     2,
     GL_FLOAT,
     GL_FALSE, // is dynamic?
-    (sizeof(vertices[0]) * 5), // skip
+    (sizeof(vertices[0]) * 8), // skip
     (void*)(sizeof(vertices[0]) * 3) // offset
   );
   glEnableVertexAttribArray(1);
+
+  glVertexAttribPointer(
+    2, // for diffuse light (layout 2)
+    3,
+    GL_FLOAT,
+    GL_FALSE, // is dynamic?
+    (sizeof(vertices[0]) * 8), // skip
+    (void*)(sizeof(vertices[0]) * 5) // offset
+  );
+  glEnableVertexAttribArray(2);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
