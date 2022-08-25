@@ -40,10 +40,14 @@ Camera camera = Camera(
 );
 
 Light mainLight = Light(
-  1.0f,
-  1.0f,
-  1.0f,
-  1.0f
+  1.0f, // r
+  1.0f, // g
+  1.0f, // b
+  0.1f, // ambient intensity
+  2.0f, // x direction
+  -1.0f, // y direction
+  -2.0f, // z direction
+  1.0f // diffuse intensity
 );
 
 Texture rockTexture = Texture(strdup(textureFile));
@@ -61,19 +65,28 @@ void createTriangle() {
   };
 
   GLfloat vertices[] = {
-    // x,y,z - u, v
-    -1.0f, -1.0f, 0.0f,   0.0f, 0.0f,
-    -1.0f, -1.0f, 1.0f,   1.0f, 0.0f,
-    1.0f, -1.0f, 0.0f,    2.0f, 0.0f,
-    0.0f, 1.0f, 0.0f,     1.0f, 2.0f
+    //x      y       z        u       v       normals
+    -1.0f,  -1.0f,    0.0f,   0.0f,   0.0f,   0.0f,   0.0f,   0.0f,
+    -1.0f,  -1.0f,    1.0f,   1.0f,   0.0f,   0.0f,   0.0f,   0.0f,
+    1.0f,   -1.0f,    0.0f,   2.0f,   0.0f,   0.0f,   0.0f,   0.0f,
+    0.0f,   1.0f,     0.0f,   1.0f,   2.0f,   0.0f,   0.0f,   0.0f
   };
 
+  utils::findAverageNormal(
+    indices,
+    12,
+    vertices,
+    32,
+    8,
+    5
+  );
+
   Mesh *obj1 = new Mesh();
-  obj1->createMesh(vertices, indices, 20, 12);
+  obj1->createMesh(vertices, indices, 32, 12);
   meshes.push_back(obj1);
 
   Mesh *obj2 = new Mesh();
-  obj2->createMesh(vertices, indices, 20, 12);
+  obj2->createMesh(vertices, indices, 32, 12);
   meshes.push_back(obj2);
 }
 
@@ -97,6 +110,8 @@ int main() {
   GLuint uniformView = shaders[0]->getViewLocation();
   GLuint uniformAmbientColor = shaders[0]->getAmbientColorLocation();
   GLuint uniformAmbientIntensity = shaders[0]->getAmbientIntensityLocation();
+  GLuint uniformDiffuseIntensity = shaders[0]->getDiffuseIntensityLocation();
+  GLuint uniformDirection = shaders[0]->getDirectionLocation();
 
   glm::mat4 projection = glm::perspective(
     45.0f,
@@ -117,7 +132,12 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     shaders[0]->useShader();
-    mainLight.useLight(uniformAmbientIntensity, uniformAmbientColor);
+    mainLight.useLight(
+      uniformAmbientIntensity,
+      uniformAmbientColor,
+      uniformDiffuseIntensity,
+      uniformDirection
+    );
 
     camera.keyHandler(mainWindow.getPressedKeys(), deltaTime);
     camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
