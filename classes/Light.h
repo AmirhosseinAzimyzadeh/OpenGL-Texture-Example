@@ -28,5 +28,5 @@ class Light {
     GLfloat ambientIntensity;
 
     glm::vec3 direction;
-    Glfloat diffuseIntensity;
+    GLfloat diffuseIntensity;
 };
